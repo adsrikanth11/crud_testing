@@ -105,7 +105,8 @@ describe("Error & 404 Handler Middlewares - Integration Tests", () => {
 
       // Should be validation error (400) not 404
       expect(res.statusCode).toBe(400);
-      expect(res.body.error).toContain("name");
+      expect(res.body.errors).toBeDefined();
+      expect(JSON.stringify(res.body.errors)).toContain("name");
     });
 
     it("should return 404 only for undefined routes", async () => {

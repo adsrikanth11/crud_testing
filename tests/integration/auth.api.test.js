@@ -74,7 +74,8 @@ describe("Auth API Integration Tests", () => {
 
       expect(response.status).toBe(400);
       expect(response.body.success).toBe(false);
-      expect(response.body.message).toBe("Passwords do not match");
+      expect(response.body.errors).toBeDefined();
+      expect(response.body.errors[0]).toContain("Passwords do not match");
     });
 
     it("should return 400 if required fields are missing", async () => {

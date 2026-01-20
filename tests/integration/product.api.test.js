@@ -20,7 +20,7 @@ describe("Products API - Integration Tests", () => {
         .send({ price: 5000 });
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.error).toBeDefined();
+      expect(res.body.errors).toBeDefined();
     });
 
     it("should return 400 when price is missing", async () => {
@@ -29,7 +29,7 @@ describe("Products API - Integration Tests", () => {
         .send({ name: "Item" });
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.error).toBeDefined();
+      expect(res.body.errors).toBeDefined();
     });
 
     it("should return 400 when price is invalid", async () => {
@@ -94,7 +94,7 @@ describe("Products API - Integration Tests", () => {
       const res = await request(app).get("/api/products/invalid");
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.error).toBeDefined();
+      expect(res.body.errors).toBeDefined();
     });
   });
 
@@ -102,7 +102,7 @@ describe("Products API - Integration Tests", () => {
     it("should update a product successfully", async () => {
       const createRes = await request(app)
         .post("/api/products")
-        .send({ name: "TV", price: 30000 });
+        .send({ name: "Television", price: 30000 });
 
       const res = await request(app)
         .put(`/api/products/${createRes.body.id}`)
@@ -174,7 +174,7 @@ describe("Products API - Integration Tests", () => {
       const res = await request(app).delete("/api/products/invalid");
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.error).toBeDefined();
+      expect(res.body.errors).toBeDefined();
     });
   });
 
