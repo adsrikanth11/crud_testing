@@ -1,6 +1,6 @@
-# CRUD Testing Project
+# Node.js REST API with Comprehensive Testing Framework
 
-A Node.js REST API project with comprehensive testing coverage using Jest, including unit tests, integration tests, and database testing.
+A production-ready Node.js REST API project demonstrating best practices for building scalable applications with user authentication, authorization, and complete CRUD operations. Features comprehensive test coverage using Jest, including unit tests, integration tests, and database testing.
 
 ## Project Overview
 
