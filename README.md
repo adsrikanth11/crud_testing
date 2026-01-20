@@ -6,8 +6,11 @@ A Node.js REST API project with comprehensive testing coverage using Jest, inclu
 
 This project demonstrates best practices for building a scalable Node.js REST API with a focus on testing. It includes:
 
+- User authentication with JWT tokens
 - Product management API endpoints
 - Database integration with MySQL
+- Secure password hashing with bcryptjs
+- Authentication and authorization middleware
 - Comprehensive error handling middleware
 - Unit and integration tests with Jest
 - Test coverage reporting
@@ -22,29 +25,37 @@ crud_testing/
 │   ├── config/
 │   │   └── db.js                # Database configuration
 │   ├── controllers/
+│   │   ├── auth.controller.js   # Authentication business logic
 │   │   └── product.controller.js # Product business logic
 │   ├── middlewares/
+│   │   ├── authMiddleware.js    # JWT authentication & authorization
 │   │   ├── errorHandler.js      # Global error handling
 │   │   └── notFoundHandler.js   # 404 handling
 │   ├── models/
+│   │   ├── user.model.js        # User data models
 │   │   └── product.model.js     # Product data models
 │   └── routes/
-│       └── product.routes.js    # API route definitions
+│       ├── auth.routes.js       # Authentication routes
+│       └── product.routes.js    # Product API routes
 ├── tests/                        # Test files
 │   ├── setup.js                 # Test setup configuration
 │   ├── teardown.js              # Test cleanup
 │   ├── helpers/
 │   │   └── test-db.js           # Database test utilities
 │   ├── unit/                    # Unit tests
+│   │   ├── user.model.test.js
+│   │   ├── authMiddleware.test.js
 │   │   ├── product.model.test.js
 │   │   ├── errorHandler.test.js
 │   │   └── notFoundHandler.test.js
 │   └── integration/             # Integration tests
+│       ├── auth.api.test.js
 │       ├── product.api.test.js
 │       └── errorHandler.integration.test.js
 ├── coverage/                     # Code coverage reports
 ├── database/
-│   └── products.sql            # Database schema
+│   ├── users.sql               # User schema
+│   └── products.sql            # Product schema
 ├── jest.config.mjs             # Jest configuration
 ├── package.json                # Project dependencies
 └── README.md                   # This file
@@ -121,7 +132,15 @@ Coverage reports are generated in the `coverage/` directory with HTML reports in
 
 ## API Endpoints
 
-The API provides the following endpoints for product management:
+### Authentication Endpoints
+
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login and receive JWT token
+- `POST /api/auth/logout` - Logout and clear refresh token
+- `POST /api/auth/refresh` - Refresh access token
+- `GET /api/auth/me` - Get current user (requires authentication)
+
+### Product Endpoints
 
 - `GET /api/products` - Get all products
 - `GET /api/products/:id` - Get a specific product
@@ -135,12 +154,17 @@ The project includes comprehensive testing:
 
 ### Unit Tests
 
+- User model tests (creation, retrieval, update, deletion, unique constraints)
+- Authentication middleware tests (valid/invalid tokens, authorization)
 - Product model tests
 - Error handler middleware tests
 - Not found handler middleware tests
 
 ### Integration Tests
 
+- Authentication API tests (registration, login, logout, token refresh)
+- User retrieval and secure cookie handling
+- Invalid input error responses
 - Product API endpoint tests
 - Error handler integration tests
 - Database interaction tests
@@ -162,14 +186,69 @@ const connection = mysql.createConnection({
 });
 ```
 
+### Authentication Configuration
+
+Authentication is configured with JWT tokens:
+
+- Set `JWT_SECRET` environment variable for token signing (default: `your-secret-key-change-in-production`)
+- Access tokens expire in 7 days
+- Refresh tokens are stored in secure HTTP-only cookies
+- Token validation via [src/middlewares/authMiddleware.js](src/middlewares/authMiddleware.js)
+
 ### Jest Configuration
 
 Test configuration is managed in [jest.config.mjs](jest.config.mjs). Includes:
 
 - Test environment setup
+- Database initialization with users and products tables
+- Table truncation before each test
 - Coverage thresholds
 - Module resolution
 - Test timeouts
+
+## Authentication Usage
+
+### User Registration
+
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "secure_password",
+    "confirmPassword": "secure_password"
+  }'
+```
+
+### User Login
+
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "password": "secure_password"
+  }'
+```
+
+Returns JWT token in response and refresh token in secure cookie.
+
+### Using JWT Token
+
+```bash
+curl -X GET http://localhost:3000/api/auth/me \
+  -H "Authorization: Bearer <JWT_TOKEN>"
+```
+
+### Refresh Token
+
+```bash
+curl -X POST http://localhost:3000/api/auth/refresh \
+  -H "Content-Type: application/json"
+```
+
+Requires valid refresh token in cookies.
 
 ## Documentation
 
