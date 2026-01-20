@@ -6,7 +6,7 @@ import {
   updateProductSchema,
   getProductSchema,
 } from "../validations/productValidation.js";
-import { authorize } from "../middlewares/authMiddleware.js";
+import { authenticate, authorize } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -27,6 +27,7 @@ router.put(
 );
 router.delete(
   "/:id",
+  authenticate,
   authorize("admin"),
   validate(getProductSchema, "params"),
   controller.deleteProduct,
