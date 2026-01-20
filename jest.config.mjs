@@ -6,7 +6,7 @@ export default {
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: "coverage",
-  collectCoverageFrom: ["src/**/*.js", "!server.js", "!src/config/**"],
+  collectCoverageFrom: ["src/**/*.js", "!src/server.js", "!src/config/**"],
   maxWorkers: 1, // Run tests sequentially to avoid database race conditions
   verbose: true,
 };

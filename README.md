@@ -45,7 +45,10 @@ crud_testing/
 │   ├── unit/                    # Unit tests
 │   │   ├── user.model.test.js
 │   │   ├── authMiddleware.test.js
+│   │   ├── authValidation.test.js
 │   │   ├── product.model.test.js
+│   │   ├── productValidation.test.js
+│   │   ├── validationMiddleware.test.js
 │   │   ├── errorHandler.test.js
 │   │   └── notFoundHandler.test.js
 │   └── integration/             # Integration tests
@@ -130,6 +133,26 @@ npm run test:coverage
 
 Coverage reports are generated in the `coverage/` directory with HTML reports in `coverage/lcov-report/`.
 
+**Run only unit tests:**
+
+```bash
+npm run test:unit
+```
+
+**Run only integration tests:**
+
+```bash
+npm run test:integration
+```
+
+**Run specific test file:**
+
+```bash
+npm test -- tests/unit/user.model.test.js
+npm test -- tests/unit/authValidation.test.js
+npm test -- tests/integration/auth.api.test.js
+```
+
 ## API Endpoints
 
 ### Authentication Endpoints
@@ -150,26 +173,141 @@ Coverage reports are generated in the `coverage/` directory with HTML reports in
 
 ## Test Coverage
 
-The project includes comprehensive testing:
+The project includes comprehensive testing with unit and integration tests:
 
 ### Unit Tests
 
-- User model tests (creation, retrieval, update, deletion, unique constraints)
-- Authentication middleware tests (valid/invalid tokens, authorization)
-- Product model tests
-- Error handler middleware tests
-- Not found handler middleware tests
+#### User Model Tests (`user.model.test.js`)
+
+- User creation with valid/invalid data
+- Admin user creation
+- Email and username uniqueness constraints
+- Password validation (minimum 6 characters)
+- Email format validation
+- User retrieval by ID, username, and email
+- Password verification
+- User update and delete operations
+- User activation and deactivation
+
+#### Auth Middleware Tests (`authMiddleware.test.js`)
+
+- Valid token authentication
+- Missing token handling
+- Invalid token rejection
+- Expired token handling
+- Authorization role checks
+- Optional authentication middleware
+
+#### Auth Validation Tests (`authValidation.test.js`)
+
+- Registration schema validation (username, email, password requirements)
+- Login schema validation
+- Refresh token schema validation
+- Username constraints (3-30 characters, alphanumeric)
+- Email format validation
+- Password matching validation
+- Unknown field stripping
+
+#### Product Validation Tests (`productValidation.test.js`)
+
+- Product creation schema validation
+- Product update schema validation
+- Product retrieval schema validation
+- Name length constraints (3-255 characters)
+- Price validation (positive numbers, decimal support)
+- Unknown field removal
+
+#### Validation Middleware Tests (`validationMiddleware.test.js`)
+
+- Validation middleware functionality
+- Error response formatting
+- Multiple error handling
+- Body, params, and query validation
+- Unknown field stripping
+- Structured error responses
+
+#### Error Handler Tests (`errorHandler.test.js`)
+
+- Global error handling
+- Error response formatting
+- HTTP status code mapping
+
+#### Not Found Handler Tests (`notFoundHandler.test.js`)
+
+- 404 error handling
+- Not found route responses
 
 ### Integration Tests
 
-- Authentication API tests (registration, login, logout, token refresh)
-- User retrieval and secure cookie handling
-- Invalid input error responses
-- Product API endpoint tests
-- Error handler integration tests
-- Database interaction tests
+#### Auth API Tests (`auth.api.test.js`)
+
+- User registration with valid credentials
+- Secure HTTP-only cookie setting
+- Password mismatch validation
+- Missing required field validation
+- Duplicate username/email handling
+- User login with correct credentials
+- Invalid credential rejection
+- User logout functionality
+- Refresh token generation and usage
+- Current user retrieval with authentication
+- Token expiration handling
+
+#### Product API Tests (`product.api.test.js`)
+
+- Product creation via API
+- Product retrieval (all and by ID)
+- Product update functionality
+- Product deletion
+- Error handling for invalid inputs
+- Not found responses
+
+#### Error Handler Integration Tests (`errorHandler.integration.test.js`)
+
+- Global error handling in API responses
+- Error message formatting
+- Status code mapping
 
 Run `npm run test:coverage` to view detailed coverage statistics.
+
+## Test Examples and Best Practices
+
+### Running Tests Efficiently
+
+```bash
+# Run all tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode (re-runs on file changes)
+npm run test:watch
+
+# Run specific test file
+npm test -- tests/unit/user.model.test.js
+
+# Run tests matching a pattern
+npm test -- --testNamePattern="auth"
+
+# Run tests with verbose output
+npm test -- --verbose
+
+# Clear Jest cache (useful when having issues)
+npx jest --clearCache
+```
+
+### Test Organization
+
+- **Unit Tests**: Test individual components (models, middleware, validation)
+- **Integration Tests**: Test API endpoints and component interactions
+- **Database Tests**: All tests include database initialization and cleanup via setup.js
+
+### Database Testing Strategy
+
+The test infrastructure includes:
+
+- Automatic table creation before tests
+- Table truncation after each test for data isolation
+- Proper cleanup after all tests complete
+- Support for both users and products tables
 
 ## Configuration
 
