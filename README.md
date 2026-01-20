@@ -175,6 +175,10 @@ npm test -- tests/integration/auth.api.test.js
 
 The project includes comprehensive testing with unit and integration tests:
 
+### Coverage Report
+
+![Test Coverage Report](./Code%20coverage%20report%20for%20All%20files.png)
+
 ### Unit Tests
 
 #### User Model Tests (`user.model.test.js`)
