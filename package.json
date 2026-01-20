@@ -1,0 +1,33 @@
+{
+  "name": "crud_testing",
+  "version": "1.0.0",
+  "description": "A Node.js project demonstrating CRUD operations with Express and MySQL, along with unit and integration testing using Jest and Supertest.",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
+    "test:unit": "cross-env NODE_ENV=test jest tests/unit --runInBand",
+    "test:integration": "cross-env NODE_ENV=test jest tests/integration --runInBand",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage"
+  },
+  "keywords": ["testing", "jest", "supertest", "nodejs", "express", "mysql", "crud", "integration-tests", "unit-tests", "babel", "nodemon"],
+  "author": "Srikanth Ambal Dhage",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mysql2": "^3.16.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.6",
+    "@babel/preset-env": "^7.28.6",
+    "babel-jest": "^30.2.0",
+    "cross-env": "^10.1.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2"
+  }
+}
