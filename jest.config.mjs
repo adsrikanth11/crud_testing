@@ -7,6 +7,6 @@ export default {
   collectCoverage: true,
   coverageDirectory: "coverage",
   collectCoverageFrom: ["src/**/*.js", "!server.js", "!src/config/**"],
-  maxWorkers: "50%", // Use 50% of available CPU cores
+  maxWorkers: 1, // Run tests sequentially to avoid database race conditions
   verbose: true,
 };
